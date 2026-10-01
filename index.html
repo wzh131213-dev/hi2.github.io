@@ -2076,6 +2076,7 @@
         <div id="actionButtons">
             <button id="partyButton" class="hud-button">队伍</button>
             <button id="mapButton" class="hud-button">路网</button>
+            <button id="autoWalkButton" class="hud-button">自主行路：关</button>
             <button id="newRunButton" class="hud-button">新一局</button>
             <button id="saveDownloadButton" class="hud-button">下载存档</button>
             <button id="saveUploadButton" class="hud-button">上传存档</button>
@@ -2148,6 +2149,7 @@
     <div id="mobileActions">
         <button class="mobile-btn" id="mobileInteract">交互</button>
         <button class="mobile-btn" id="mobileSprint">疾行</button>
+        <button class="mobile-btn" id="mobileAutoWalk">自走</button>
     </div>
 </div>
 
@@ -3943,6 +3945,7 @@
         navigationTarget = null;
         navigationRoute = [];
         navigationRouteIndex = 0;
+        setAutoWalkEnabled(false, true);
         renderNavigationPresets();
     }
 
@@ -4808,6 +4811,84 @@
     };
 
     let sprinting = false;
+    let autoWalkEnabled = false;
+    const AUTO_WALK_SPEED_FACTOR = 0.5;
+
+    function setAutoWalkEnabled(enabled, silent = false) {
+        const canEnable =
+            navigationEnabled &&
+            navigationTarget &&
+            navigationRoute.length > 1;
+
+        const next = enabled ? canEnable : false;
+
+        if (enabled && !canEnable) {
+            if (!silent) {
+                showMessage("请先在路网中设置导航目标，再开启自主行路");
+            }
+            return false;
+        }
+
+        if (autoWalkEnabled === next) {
+            return autoWalkEnabled;
+        }
+
+        autoWalkEnabled = next;
+
+        const desktopButton = document.getElementById("autoWalkButton");
+        if (desktopButton) {
+            desktopButton.textContent = autoWalkEnabled
+                ? "自主行路：开"
+                : "自主行路：关";
+        }
+
+        const mobileButton = document.getElementById("mobileAutoWalk");
+        if (mobileButton) {
+            mobileButton.textContent = autoWalkEnabled
+                ? "自走中"
+                : "自走";
+        }
+
+        if (autoWalkEnabled) {
+            sprinting = false;
+        }
+
+        if (!silent) {
+            showMessage(
+                autoWalkEnabled
+                    ? "已开启自主行路：自动沿导航前进（速度为正常步行 50%）"
+                    : "已关闭自主行路"
+            );
+        }
+
+        return autoWalkEnabled;
+    }
+
+    function toggleAutoWalk() {
+        setAutoWalkEnabled(!autoWalkEnabled);
+    }
+
+    function getAutoWalkVector() {
+        if (!autoWalkEnabled || !navigationTarget || navigationRoute.length < 2) {
+            return null;
+        }
+
+        const px = player.position.x;
+        const pz = player.position.z;
+        const pr = projectOnRoute(navigationRoute, navigationRouteIndex, px, pz);
+        navigationRouteIndex = pr.i;
+
+        const aim = routePointAhead(navigationRoute, pr.i, pr.t, pr.d > 25 ? 0 : 8);
+        const dx = aim.x - px;
+        const dz = aim.z - pz;
+        const distance = Math.hypot(dx, dz);
+
+        if (distance < 0.15) {
+            return null;
+        }
+
+        return new THREE.Vector3(dx / distance, 0, dz / distance);
+    }
 
     function getMovementInput() {
         if (pointerDirection && pointerDirection.strength > 0.05) {
@@ -5130,11 +5211,19 @@
     );
 
     document.getElementById(
+        "mobileAutoWalk"
+    ).addEventListener(
+        "click",
+        toggleAutoWalk
+    );
+
+    document.getElementById(
         "mobileSprint"
     ).addEventListener(
         "touchstart",
         () => {
             sprinting = true;
+            setAutoWalkEnabled(false, true);
         }
     );
 
@@ -5155,6 +5244,7 @@
                 event.code === "ShiftRight"
             ) {
                 sprinting = true;
+                setAutoWalkEnabled(false, true);
             }
         }
     );
@@ -5292,6 +5382,21 @@
             movement.set(input.x, 0, input.y);
         }
 
+        const hasManualMoveInput = movement.lengthSq() > 0.0001;
+
+        if (hasManualMoveInput && autoWalkEnabled) {
+            setAutoWalkEnabled(false, true);
+        }
+
+        if (!hasManualMoveInput && autoWalkEnabled) {
+            const autoWalkVector = getAutoWalkVector();
+
+            if (autoWalkVector) {
+                movement.copy(autoWalkVector);
+                player.yaw = Math.atan2(autoWalkVector.x, autoWalkVector.z);
+            }
+        }
+
         if (movement.lengthSq() > 1) {
             movement.normalize();
         }
@@ -5314,7 +5419,9 @@
             nearest.road &&
             nearest.road.type === "branch";
 
-        if (onMainRoad) {
+        if (autoWalkEnabled) {
+            speed = CONFIG.playerWalkSpeed * partyStats().speed * AUTO_WALK_SPEED_FACTOR;
+        } else if (onMainRoad) {
             speed *= player.roadSpeedMultiplier;
         } else if (onBranchRoad) {
             speed *= 2.0;
@@ -5601,7 +5708,13 @@
             state = "疾行 ×1.5";
         }
 
-        if (currentFormation === "rush") {
+        if (autoWalkEnabled) {
+            actualSpeed = CONFIG.playerWalkSpeed * partyStats().speed * AUTO_WALK_SPEED_FACTOR;
+            multiplier = AUTO_WALK_SPEED_FACTOR;
+            state = "自主行路 ×0.5";
+        }
+
+        if (currentFormation === "rush" && !autoWalkEnabled) {
             actualSpeed *= 1.15;
         }
 
@@ -6144,6 +6257,13 @@
     );
 
     document.getElementById(
+        "autoWalkButton"
+    ).addEventListener(
+        "click",
+        toggleAutoWalk
+    );
+
+    document.getElementById(
         "closePartyButton"
     ).addEventListener(
         "click",
@@ -6259,6 +6379,7 @@
         navigationTarget = null;
         navigationRoute = [];
         navigationRouteIndex = 0;
+        setAutoWalkEnabled(false, true);
         populateWorld();
         generateResources();
         generateSignposts();
