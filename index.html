@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>西游取经路</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="game-page">
+    <h1>西游取经路</h1>
+    <p class="intro">你将化身孙悟空，护送取经队伍闯过花果山、白骨岭与火焰山。</p>
+
+    <section class="hud" aria-label="游戏状态">
+      <span>关卡：<strong id="levelLabel">1/3</strong></span>
+      <span>生命：<strong id="hpLabel">100</strong></span>
+      <span>分数：<strong id="scoreLabel">0</strong></span>
+      <span>状态：<strong id="stateLabel">待命</strong></span>
+    </section>
+
+    <section class="controls-row">
+      <button id="startBtn" type="button">开始</button>
+      <button id="pauseBtn" type="button">暂停</button>
+      <button id="restartBtn" type="button">重新开始</button>
+    </section>
+
+    <p id="storyText" class="story"></p>
+
+    <section class="board-wrap" aria-label="游戏区域">
+      <canvas id="gameCanvas" width="720" height="432"></canvas>
+    </section>
+
+    <section class="mobile-controls" aria-label="触摸方向控制">
+      <button type="button" data-dir="up">↑</button>
+      <div class="middle-row">
+        <button type="button" data-dir="left">←</button>
+        <button type="button" data-dir="down">↓</button>
+        <button type="button" data-dir="right">→</button>
+      </div>
+    </section>
+
+    <p class="hint">操作：键盘方向键 / WASD，移动端可点击方向按钮。避开妖怪与陷阱，收集经文（📜）和蟠桃（🍑）冲向终点（🚩）。</p>
+  </main>
+
+  <script src="./game.js"></script>
+</body>
+</html>
