@@ -3117,7 +3117,7 @@
 
         if (character.id === "wukong") {
             const band = new THREE.Mesh(
-                new THREE.TorusGeometry(0.25, 0.045, 5, 12),
+                new THREE.TorusGeometry(0.25, 0.045, 12, 24),
                 gold
             );
             band.rotation.x = Math.PI / 2;
@@ -3126,7 +3126,7 @@
 
             for (const side of [-1, 1]) {
                 const ear = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.11, 6, 5),
+                    new THREE.SphereGeometry(0.11, 14, 12),
                     makeCharacterMaterial(0x8a5b3f)
                 );
                 ear.position.set(side * 0.29, 2.55, 0);
@@ -3134,7 +3134,7 @@
             }
 
             const staff = new THREE.Mesh(
-                new THREE.CylinderGeometry(0.035, 0.035, 1.7, 6),
+                new THREE.CylinderGeometry(0.035, 0.035, 1.7, 14),
                 gold
             );
             staff.position.set(0.55, 1.35, -0.1);
@@ -3142,7 +3142,7 @@
             group.add(staff);
         } else if (character.id === "bajie") {
             const snout = new THREE.Mesh(
-                new THREE.ConeGeometry(0.17, 0.30, 8),
+                new THREE.ConeGeometry(0.17, 0.30, 16),
                 makeCharacterMaterial(0xb77861)
             );
             snout.rotation.x = Math.PI / 2;
@@ -3151,7 +3151,7 @@
 
             for (const side of [-1, 1]) {
                 const ear = new THREE.Mesh(
-                    new THREE.ConeGeometry(0.10, 0.28, 5),
+                    new THREE.ConeGeometry(0.10, 0.28, 12),
                     makeCharacterMaterial(0xd49a7f)
                 );
                 ear.position.set(side * 0.30, 2.64, 0);
@@ -3160,7 +3160,7 @@
             }
         } else if (character.id === "wujing") {
             const beard = new THREE.Mesh(
-                new THREE.ConeGeometry(0.16, 0.38, 5),
+                new THREE.ConeGeometry(0.16, 0.38, 12),
                 dark
             );
             beard.position.set(0, 2.18, 0.22);
@@ -3169,7 +3169,7 @@
 
             for (let i = 0; i < 5; i++) {
                 const bead = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.055, 6, 5),
+                    new THREE.SphereGeometry(0.055, 12, 10),
                     makeCharacterMaterial(0x8c5f36)
                 );
                 const angle = i / 4 * Math.PI - Math.PI / 2;
@@ -3303,7 +3303,7 @@
 
         const bodyColor = palette[character.id] || 0x6c6671;
         const body = new THREE.Mesh(
-            new THREE.CapsuleGeometry(0.33, 0.72, 4, 7),
+            new THREE.CapsuleGeometry(0.33, 0.72, 10, 18),
             makeCharacterMaterial(bodyColor)
         );
         body.position.y = 1.55;
@@ -3311,7 +3311,7 @@
         group.add(body);
 
         const robe = new THREE.Mesh(
-            new THREE.ConeGeometry(0.48, 0.78, 6),
+            new THREE.ConeGeometry(0.48, 0.78, 14),
             makeCharacterMaterial(bodyColor)
         );
         robe.position.y = 1.36;
@@ -3325,7 +3325,7 @@
                 : 0xd6a17d;
 
         const head = new THREE.Mesh(
-            new THREE.SphereGeometry(0.30, 9, 7),
+            new THREE.SphereGeometry(0.30, 18, 16),
             makeCharacterMaterial(skinColor)
         );
         head.position.y = 2.38;
@@ -3333,7 +3333,7 @@
         group.add(head);
 
         const hair = new THREE.Mesh(
-            new THREE.SphereGeometry(0.31, 8, 6),
+            new THREE.SphereGeometry(0.31, 16, 14),
             makeCharacterMaterial(
                 character.id === "bailong" ? 0xf2f0e7 : 0x171717
             )
@@ -3354,7 +3354,7 @@
         mount.userData.legs = [];
 
         const horseBody = new THREE.Mesh(
-            new THREE.CapsuleGeometry(0.62, 1.7, 4, 8),
+            new THREE.CapsuleGeometry(0.62, 1.7, 10, 20),
             makeCharacterMaterial(0xf1eee2)
         );
         horseBody.rotation.z = Math.PI / 2;
@@ -3363,7 +3363,7 @@
         mount.add(horseBody);
 
         const horseHead = new THREE.Mesh(
-            new THREE.CapsuleGeometry(0.38, 0.8, 4, 6),
+            new THREE.CapsuleGeometry(0.38, 0.8, 10, 14),
             makeCharacterMaterial(0xf7f3e8)
         );
         horseHead.position.set(0.95, 2.15, -0.05);
@@ -3372,7 +3372,7 @@
         mount.add(horseHead);
 
         const neck = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.32, 0.45, 1.25, 6),
+            new THREE.CylinderGeometry(0.32, 0.45, 1.25, 14),
             makeCharacterMaterial(0xf0ede2)
         );
         neck.position.set(0.55, 2.0, 0);
@@ -3385,7 +3385,7 @@
         for (const side of [-1, 1]) {
             for (const front of [-1, 1]) {
                 const leg = new THREE.Mesh(
-                    new THREE.CylinderGeometry(0.10, 0.14, 1.35, 5),
+                    new THREE.CylinderGeometry(0.10, 0.14, 1.35, 12),
                     legMaterial
                 );
                 leg.position.set(front * 0.55, 0.78, side * 0.42);
@@ -4209,7 +4209,7 @@
         const mesh = new THREE.Mesh(
             new THREE.IcosahedronGeometry(
                 type === "gold" ? 1.3 : 0.9,
-                0
+                1
             ),
             new THREE.MeshStandardMaterial({
                 color,
@@ -4340,7 +4340,7 @@
                 0.18,
                 0.24,
                 4,
-                8
+                16
             ),
             new THREE.MeshStandardMaterial({
                 color: 0x493523
@@ -4430,7 +4430,7 @@
                 1.5,
                 1.8,
                 0.8,
-                8
+                16
             ),
             new THREE.MeshStandardMaterial({
                 color: type === "shrine"
@@ -4445,7 +4445,7 @@
         group.add(altar);
 
         const marker = new THREE.Mesh(
-            new THREE.SphereGeometry(0.5, 10, 8),
+            new THREE.SphereGeometry(0.5, 18, 16),
             new THREE.MeshStandardMaterial({
                 color: type === "shrine"
                     ? 0xd5af5b
