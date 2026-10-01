@@ -2711,7 +2711,7 @@
                 0.8 * scale,
                 1.1 * scale,
                 7 * scale,
-                7
+                12
             ),
             new THREE.MeshStandardMaterial({
                 color: 0x654c35
@@ -2812,7 +2812,7 @@
         group.add(hall);
 
         const roof = new THREE.Mesh(
-            new THREE.ConeGeometry(13, 5, 4),
+            new THREE.ConeGeometry(13, 5, 8),
             new THREE.MeshStandardMaterial({
                 color: 0x9d4e38
             })
@@ -2866,7 +2866,7 @@
     // 四坡屋顶 + 出檐
     function bRoof(w, d, h, material, y) {
         const g = new THREE.Group();
-        const cone = new THREE.Mesh(new THREE.ConeGeometry(1, h, 4), material);
+        const cone = new THREE.Mesh(new THREE.ConeGeometry(1, h, 8), material);
         cone.rotation.y = Math.PI / 4;
         cone.scale.set(w * 0.72, 1, d * 0.72);
         cone.position.y = y + h / 2;
@@ -3182,7 +3182,7 @@
             }
         } else if (character.id === "tang") {
             const cap = new THREE.Mesh(
-                new THREE.CylinderGeometry(0.26, 0.20, 0.22, 8),
+                new THREE.CylinderGeometry(0.26, 0.20, 0.22, 14),
                 red
             );
             cap.position.y = 2.74;
@@ -3190,7 +3190,7 @@
         } else if (character.id === "heixiong") {
             for (const side of [-1, 1]) {
                 const ear = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.14, 6, 5),
+                    new THREE.SphereGeometry(0.14, 14, 12),
                     dark
                 );
                 ear.position.set(side * 0.29, 2.63, 0);
@@ -3204,7 +3204,7 @@
             group.add(armor);
         } else if (character.id === "huangfeng") {
             const scarf = new THREE.Mesh(
-                new THREE.TorusGeometry(0.32, 0.07, 5, 12),
+                new THREE.TorusGeometry(0.32, 0.07, 12, 24),
                 makeCharacterMaterial(0xd19a37)
             );
             scarf.rotation.x = Math.PI / 2;
@@ -3212,7 +3212,7 @@
             group.add(scarf);
         } else if (character.id === "honghaier") {
             const flame = new THREE.Mesh(
-                new THREE.ConeGeometry(0.24, 0.55, 5),
+                new THREE.ConeGeometry(0.24, 0.55, 12),
                 red
             );
             flame.position.y = 2.90;
@@ -3226,7 +3226,7 @@
         } else if (character.id === "bull") {
             for (const side of [-1, 1]) {
                 const horn = new THREE.Mesh(
-                    new THREE.ConeGeometry(0.09, 0.40, 5),
+                    new THREE.ConeGeometry(0.09, 0.40, 12),
                     white
                 );
                 horn.position.set(side * 0.28, 2.78, 0);
@@ -3241,7 +3241,7 @@
             group.add(belt);
         } else if (character.id === "tiejin") {
             const fan = new THREE.Mesh(
-                new THREE.ConeGeometry(0.30, 0.55, 6),
+                new THREE.ConeGeometry(0.30, 0.55, 14),
                 green
             );
             fan.position.set(0.50, 1.45, 0.10);
@@ -3249,7 +3249,7 @@
             group.add(fan);
         } else if (character.id === "baigujing") {
             const hair = new THREE.Mesh(
-                new THREE.SphereGeometry(0.33, 8, 6),
+                new THREE.SphereGeometry(0.33, 16, 14),
                 dark
             );
             hair.scale.set(1.08, 0.90, 1.02);
@@ -3258,7 +3258,7 @@
         } else if (character.id === "peng") {
             for (const side of [-1, 1]) {
                 const wing = new THREE.Mesh(
-                    new THREE.ConeGeometry(0.35, 0.75, 5),
+                    new THREE.ConeGeometry(0.35, 0.75, 12),
                     makeCharacterMaterial(0x8b6c3b)
                 );
                 wing.position.set(side * 0.47, 1.85, -0.08);
@@ -3266,14 +3266,14 @@
                 group.add(wing);
             }
             const crown = new THREE.Mesh(
-                new THREE.ConeGeometry(0.18, 0.35, 5),
+                new THREE.ConeGeometry(0.18, 0.35, 12),
                 gold
             );
             crown.position.y = 2.86;
             group.add(crown);
         } else if (character.id === "bailong") {
             const mane = new THREE.Mesh(
-                new THREE.ConeGeometry(0.20, 0.65, 6),
+                new THREE.ConeGeometry(0.20, 0.65, 14),
                 white
             );
             mane.position.set(-0.25, 2.70, 0);
@@ -4587,8 +4587,8 @@
                 new THREE.CapsuleGeometry(
                     0.45,
                     0.9,
-                    4,
-                    7
+                    10,
+                    16
                 ),
                 new THREE.MeshStandardMaterial({
                     color: colors[
